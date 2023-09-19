@@ -2,31 +2,66 @@
 
 {% block title %}Simple Blog - Blog Page{% endblock %}
 
-{% block heading %}Simple Blog - Blog Page{% endblock %}
+{% block heading %}CountAi DashBoard{% endblock %}
 
 {% block content %}
-    <h2>Total Number of Posts: {{ posts|length }}</h2>
+    <h2>Total Number of Mills: {{ mills|length }}</h2>
 
-    {% for post in posts %}
-        <div class="post">
+    
+    <div class="card-container" >
+        {% for index, row in mills.iterrows() %}
+            <div class="card" style="width: 18rem;">
+                {% if row['lastuv_inspectionOn'] <= lh_time %}
 
-            {% if post.status == 'published' %}
-                <h3>{{ post.title }}</h3>
-                <p>{{ post.content|truncate }}</p>
-                <p>Published on: {{ post.publication_date }}</p>
+                    <img src="{{ url_for('static', path='/Image/material-symbols-mode-off-on-2.svg') }}" class="card-img-top"
+                        alt="..." width="500" height="150">
+                {% else %}
+                    <img src="{{ url_for('static', path='/Image/material-symbols-mode-off-on-4.svg') }}" class="card-img-top"
+                    alt="..." width="500" height="150">
+                {% endif %}      
+                <div class="card-body" >
+                    <h5 class="card-title" style="text-align: center;">{{ row["millName"] }}</h5>
+                    <p>Today's Count: {{ row["lastDay_totalCount"] }}</p>
+                    <p>Today's UV - Defect: {{ row["lastDay_uv_Defect"] }}</p>
+                    <p>Today's ConeTip - Defect: {{ row["lastDay_conetip_Defect"] }}</p>
+                    <p class="card-text">Last inspection at: {{ row["lastconetip_inspectionOn"] }}</p>
+                    <div style="margin: auto; width: 50%">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasBottom{{ index }}" aria-controls="offcanvasBottom{{ index }}" >View Mill Details</button>
+                    </div>
+                    
 
-                <h4>Comments:</h4>
-                <ul>
-                    {% for comment in post.comments %}
-                        <li class="comment">{{ comment.author }}-: {{ comment.content }}</li>
-                        
+                    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom{{ index }}"
+                        aria-labelledby="offcanvasBottomLabel{{ index }}">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasBottomLabel{{ index }}">Overview </h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <h1>Mill Data: <img src="" alt=""></h1>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem; "><p>MillName : {{ row.millName }}</p></div>                            
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>Uv_Defect : {{ row["total_uv_Defect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>Uv_Nondefect : {{ row["total_uv_Nondefect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>Conetip_Nondefect : {{ row["total_conetip_Nondefect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>Conetip_Defect : {{ row["total_conetip_Defect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_uv_Defect : {{ row["lastDay_uv_Defect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_uv_Nondefect : {{ row["lastDay_uv_Nondefect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_conetip_Nondefect : {{ row["lastDay_conetip_Nondefect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_conetip_Defect : {{ row["lastDay_conetip_Defect"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem; "><p>lastuv_inspectionOn : {{ row["lastuv_inspectionOn"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lastconetip_inspectionOn : {{ row["lastconetip_inspectionOn"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>firstInspectionOn : {{ row["firstInspectionOn"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>totalCount : {{ row["totalCount"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>totaluvCount : {{ row["totaluvCount"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>totalconetipCount : {{ row["totalconetipCount"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_totaluvCount : {{ row["lastDay_totaluvCount"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_totalconetipCount : {{ row["lastDay_totalconetipCount"] }}</p></div>
+                            <div class="badge bg-primary text-wrap" style="width: 12rem; height:3rem; padding-top:1rem;"><p>lDay_totalCount : {{ row["lastDay_totalCount"] }}</p> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
 
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>This post is still in draft mode.</p>
-            {% endif %}
-        </div>
-        <hr>
-    {% endfor %}
+    </div>
 {% endblock %}

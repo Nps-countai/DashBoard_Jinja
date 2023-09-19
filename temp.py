@@ -3,28 +3,14 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+import pandas as pd
+from datetime import datetime, timedelta
+last_hour_date_time = datetime.now() - timedelta(hours = 1)
+lh_time = last_hour_date_time.strftime('%Y-%m-%d %H:%M:%S')
 
 templates = Jinja2Templates(directory="templates")  
+df = pd.read_csv('new.csv')
 
-
-fake_posts_db = [{
-    'title': 'First Blog Post',
-    'content': 'Content of the first blog post.',
-    'author': 'John Doe',
-    'publication_date': '2023-06-20',
-    'comments': [
-        {'author': 'Alice', 'content': 'Great post!'},
-        {'author': 'Bob', 'content': 'Intresting read.'}
-    ],
-    'status': 'published'
-},{
-    'title': 'Second Blog Post',
-    'content': 'Content of the second blog post.',
-    'author': 'Jane Smith',
-    'publication_date': None,
-    'comments': [],
-    'status': 'draft'
-}]
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -37,4 +23,5 @@ def about():
 @app.get("/", response_class=HTMLResponse)
 async def read_posts(request: Request):
     return templates.TemplateResponse("blog.html", {"request": request, 
-                                                    "posts": fake_posts_db})
+                                                    "mills" : df,
+                                                    "lh_time" : lh_time})
