@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 
 templates = Jinja2Templates(directory="templates")  
 
@@ -27,7 +29,12 @@ fake_posts_db = [{
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-    
+
 @app.get("/about")
 def about():
     return "All you need to know about Simple Blog"
+
+@app.get("/", response_class=HTMLResponse)
+async def read_posts(request: Request):
+    return templates.TemplateResponse("blog.html", {"request": request, 
+                                                    "posts": fake_posts_db})
