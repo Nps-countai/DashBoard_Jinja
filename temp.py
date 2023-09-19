@@ -27,10 +27,10 @@ async def about():
 @app.get("/", response_class=HTMLResponse)
 async def read_posts(request: Request):
     return templates.TemplateResponse("blog.html", {"request": request, 
-                                                    "mills" : pd.read_csv('new.csv'),
+                                                    "mills" : updatedData(),
                                                     "lh_time" : lh_time})
 
-def runApp():
-    if __name__ == "__main__":
-        uvicorn.run(app, host="127.0.0.1", port=8088)
-    
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8088)
+

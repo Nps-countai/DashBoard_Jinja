@@ -6,21 +6,22 @@ import json
 from datetime import datetime
 from pandas import json_normalize
 
-cred = credentials.Certificate("credential.json")
-if not firebase_admin._apps:
-    firebase_admin.initialize_app(cred, {
-        "databaseURL": "https://coneui-default-rtdb.asia-southeast1.firebasedatabase.app/"
-    })
-
-ref = db.reference("/")
-fbData = ref.get()
-
-uv_df = pd.DataFrame(columns=[])
-conetip_df = pd.DataFrame(columns=[])
-mill_list = []
-final_df = pd.DataFrame(columns=['millName', 'totalCount','totaluvCount' ,'totalconetipCount' ,'total_uv_Defect', 'total_uv_Nondefect', 'total_conetip_Nondefect', 'total_conetip_Defect', 'lastDay_uv_Defect', 'lastDay_uv_Nondefect', 'lastDay_conetip_Nondefect', 'lastDay_conetip_Defect', 'lastuv_inspectionOn', 'lastconetip_inspectionOn','firstInspectionOn', 'lastDay_totaluvCount', 'lastDay_totalconetipCount', 'lastDay_totalCount'])
-
 def updatedData():
+    
+    cred = credentials.Certificate("credential.json")
+    if not firebase_admin._apps:
+        firebase_admin.initialize_app(cred, {
+            "databaseURL": "https://coneui-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        })
+
+    ref = db.reference("/")
+    fbData = ref.get()
+
+    uv_df = pd.DataFrame(columns=[])
+    conetip_df = pd.DataFrame(columns=[])
+    mill_list = []
+    final_df = pd.DataFrame(columns=['millName', 'totalCount','totaluvCount' ,'totalconetipCount' ,'total_uv_Defect', 'total_uv_Nondefect', 'total_conetip_Nondefect', 'total_conetip_Defect', 'lastDay_uv_Defect', 'lastDay_uv_Nondefect', 'lastDay_conetip_Nondefect', 'lastDay_conetip_Defect', 'lastuv_inspectionOn', 'lastconetip_inspectionOn','firstInspectionOn', 'lastDay_totaluvCount', 'lastDay_totalconetipCount', 'lastDay_totalCount'])
+
     for i in fbData:
         mill_list.append(i)
         temp_conetip = pd.json_normalize(fbData[i]["conetip"] )
