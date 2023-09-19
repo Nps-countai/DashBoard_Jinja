@@ -17,8 +17,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/about")
-def about():
-    return "All you need to know about Simple Blog"
+async def about():
+    return "Need to link data"
 
 @app.get("/", response_class=HTMLResponse)
 async def read_posts(request: Request):
